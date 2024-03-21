@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "btwands",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This mod aims to help new BTA modders.",
+  "name": "Builder The Wands",
+  "description": "This mod builds.",
   "authors": [
-    "Turnip Labs"
+    "StandardTactical"
   ],
   "contact": {
     "homepage": "",
@@ -19,20 +19,20 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-			"turniplabs.examplemod.ExampleMod"
+			"standardtacticalknight.btwands.BTWands"
     ],
 		"beforeGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"standardtacticalknight.btwands.BTWands"
 		],
 		"afterGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"standardtacticalknight.btwands.BTWands"
 		],
 		"recipesReady": [
-			"turniplabs.examplemod.ExampleMod"
+			"standardtacticalknight.btwands.BTWands"
 		]
 	},
   "mixins": [
-      "examplemod.mixins.json"
+		"btwands.mixins.json"
   ],
 
   "depends": {
