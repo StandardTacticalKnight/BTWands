@@ -1,2 +1,8 @@
-item.btwands.wand.name=Wand
-item.btwands.wand.desc=Builder's Wand
+item.btwands.flintwand.name=Flint Wand
+item.btwands.flintwand.desc=Builder's Wand
+item.btwands.quartzwand.name=Quartz Wand
+item.btwands.quartzwand.desc=Builder's Wand
+item.btwands.olivinewand.name=Olivine Wand
+item.btwands.olivinewand.desc=Builder's Wand
+item.btwands.diamondwand.name=Diamond Wand
+item.btwands.diamondwand.desc=Builder's Wand

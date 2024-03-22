@@ -4,9 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.RenderGlobal;
 import net.minecraft.client.render.camera.ICamera;
 import net.minecraft.core.HitResult;
-import net.minecraft.core.block.Block;
 import net.minecraft.core.item.ItemStack;
-import net.minecraft.core.player.gamemode.Gamemode;
 import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.World;
 import org.lwjgl.opengl.GL11;
@@ -22,6 +20,8 @@ import standardtacticalknight.btwands.item.ItemWand;
 
 import java.util.LinkedList;
 
+import static org.lwjgl.input.Keyboard.getEventKey;
+
 @Mixin(value = RenderGlobal.class, remap = false)
 public class BTWandsBlockEventMixin {
 	@Shadow
@@ -31,9 +31,9 @@ public class BTWandsBlockEventMixin {
 	@Inject(method = "drawSelectionBox", at =  @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;setBlockBoundsBasedOnState(Lnet/minecraft/core/world/World;III)V"))
 	private void BTWandOverlayRender(ICamera camera, HitResult hitResult, float partialTick, CallbackInfo ci) {
 		ItemStack heldItem = this.mc.thePlayer.inventory.getCurrentItem(); //get held item
-		if (heldItem != null && heldItem.itemID == BTWands.wand.id) { //if it's a wand then find placeable spots to draw
+		if (heldItem != null && heldItem.getItem() instanceof ItemWand) { //if it's a wand then find placeable spots to draw
 			WandBlockFinder blockFinder = new WandBlockFinder(worldObj);
-			LinkedList<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult, 3);
+			LinkedList<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult, ((ItemWand) heldItem.getItem()).getRange(),((ItemWand) heldItem.getItem()).getMode()); //find em based on held item's range TODO: fix this mess...
 			if (!blocks.isEmpty()) {
 				AABB aabb;
 				RenderGlobal thisObject = (RenderGlobal) (Object) this; //grab the inject's instance of 'this' TODO: is this required or is there a more elegant way to do this?
