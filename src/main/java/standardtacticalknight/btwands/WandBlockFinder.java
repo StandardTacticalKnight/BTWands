@@ -133,14 +133,18 @@ public class WandBlockFinder {
 	 * @return if block is valid or no
 	 */
 	private Boolean CheckValid(BlockPos3D candidate){
-		Block base = Block.blocksList[world.getBlockId(candidate.x, candidate.y, candidate.z)];
-		if(base != null && base.blockMaterial.isSolid() && base.id == this.origin.id){ //is foundation there and also same block as origin
-			BlockPos3D placePos = candidate.move(side);
-			Block place = Block.blocksList[world.getBlockId(placePos.x, placePos.y, placePos.z)];
-			if(place == null || place.blockMaterial.isReplaceable()){ //is place area air or replaceable block
-				return true;
+		if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
+			Block base = Block.blocksList[world.getBlockId(candidate.x, candidate.y, candidate.z)];
+			if (base != null && base.blockMaterial.isSolid() && base.id == this.origin.id) { //is foundation there and also same block as origin
+				BlockPos3D placePos = candidate.move(side);
+				if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
+					Block place = Block.blocksList[world.getBlockId(placePos.x, placePos.y, placePos.z)];
+					if (place == null || place.blockMaterial.isReplaceable()) { //is place area air or replaceable block
+						return true;
+					}
+				}
 			}
 		}
-        return false;
+		return false;
     }
 }
