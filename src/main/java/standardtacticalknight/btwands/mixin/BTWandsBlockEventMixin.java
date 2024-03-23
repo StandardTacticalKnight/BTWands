@@ -30,9 +30,10 @@ public class BTWandsBlockEventMixin {
 	private World worldObj;
 	@Inject(method = "drawSelectionBox", at =  @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;setBlockBoundsBasedOnState(Lnet/minecraft/core/world/World;III)V"))
 	private void BTWandOverlayRender(ICamera camera, HitResult hitResult, float partialTick, CallbackInfo ci) {
+
 		ItemStack heldItem = this.mc.thePlayer.inventory.getCurrentItem(); //get held item
 		if (heldItem != null && heldItem.getItem() instanceof ItemWand) { //if it's a wand then find placeable spots to draw
-			WandBlockFinder blockFinder = new WandBlockFinder(worldObj);
+			WandBlockFinder blockFinder = new WandBlockFinder(worldObj, mc.thePlayer);
 			LinkedList<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult, ((ItemWand) heldItem.getItem()).getRange(),((ItemWand) heldItem.getItem()).getMode()); //find em based on held item's range TODO: fix this mess...
 			if (!blocks.isEmpty()) {
 				AABB aabb;

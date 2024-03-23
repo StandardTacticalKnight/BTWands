@@ -1,8 +1,8 @@
 item.btwands.flintwand.name=Flint Wand
-item.btwands.flintwand.desc=Builder's Wand
+item.btwands.flintwand.desc=Range: 3x3 | Change modes by Sneak Clicking
 item.btwands.quartzwand.name=Quartz Wand
-item.btwands.quartzwand.desc=Builder's Wand
+item.btwands.quartzwand.desc=Range: 7x7 | Change modes by Sneak Clicking
 item.btwands.olivinewand.name=Olivine Wand
-item.btwands.olivinewand.desc=Builder's Wand
+item.btwands.olivinewand.desc=Range: 9x9 | Change modes by Sneak Clicking
 item.btwands.diamondwand.name=Diamond Wand
-item.btwands.diamondwand.desc=Builder's Wand
+item.btwands.diamondwand.desc=Range: 11x11 | Change modes by Sneak Clicking

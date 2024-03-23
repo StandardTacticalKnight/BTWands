@@ -25,24 +25,24 @@ public class ItemWand extends ItemTool {
 	private final int range;
 	public enum Mode {
 		OPEN,
-		HORIZ,
-		VERT
+		HORIZONTAL,
+		VERTICAL
 	}
 	private Mode mode = Mode.OPEN;
 
 	public ItemWand(String name, int id, int damageDealt, ToolMaterial toolMaterial, int range) {
 		super(name, id, damageDealt, toolMaterial, tagEffectiveAgainst);
 		this.range = range;
+		this.setMaxDamage(toolMaterial.getDurability()*4);
 	}
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int blockX, int blockY, int blockZ, Side side, double xPlaced, double yPlaced) {
-		WandBlockFinder blockFinder = new WandBlockFinder(world);
+		WandBlockFinder blockFinder = new WandBlockFinder(world, entityplayer);
 		HitResult hitResult = new HitResult(blockX, blockY, blockZ, side, Vec3d.createVector(blockX, blockY, blockZ));
-		//BTWands.finder = blockFinder;
-		LinkedList<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult,this.range, this.mode);
-		if (!blocks.isEmpty()) {
+		LinkedList<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult,this.range, this.mode);//generate the block list for placement
+		if (!blocks.isEmpty() && getInventorySlot(entityplayer,blockFinder.origin.id,blockFinder.meta)!=-1) { //if there is at least one placeable block and at least one of that item in the player's inventory
 			for (BlockPos3D block : blocks) {
-				if(consumeItem(entityplayer,blockFinder.origin.id,blockFinder.meta)){
+				if(consumeItem(entityplayer,blockFinder.origin.id,blockFinder.meta)){ //try to take one item from the player's inv and place it in the world
 					world.editingBlocks = true;
 					boolean placed = world.setBlockAndMetadataWithNotify(block.x, block.y, block.z, blockFinder.origin.id, blockFinder.meta);
 					world.editingBlocks = false;
@@ -50,7 +50,7 @@ public class ItemWand extends ItemTool {
 					if(!placed){
 						BTWands.LOGGER.warn("refunded item, this should not happen in normal conditions");
 						refundItem(entityplayer,new ItemStack(blockFinder.origin,1,blockFinder.meta)); //if placing the block fails, refund the item
-					}
+					}else itemstack.damageItem(1, entityplayer); //use up the durability for every block placed
 				}else{
 					break; //if we cant find an item to consume then stop
 				}
@@ -65,15 +65,16 @@ public class ItemWand extends ItemTool {
 		if(entityplayer.isSneaking()){
 			switch(this.mode) {
 				case OPEN:
-					this.mode = Mode.VERT;
+					this.mode = Mode.VERTICAL;
 					break;
-				case VERT:
-					this.mode = Mode.HORIZ;
+				case VERTICAL:
+					this.mode = Mode.HORIZONTAL;
 					break;
-				case HORIZ:
+				case HORIZONTAL:
 					this.mode = Mode.OPEN;
 					break;
 			}
+
 			entityplayer.addChatMessage("Wand mode: "+this.mode);
 		}
 		return itemstack;
