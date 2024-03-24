@@ -30,10 +30,10 @@ public class BTWands implements ModInitializer, GameStartEntrypoint, RecipeEntry
 	public void beforeGameStart() {
 		int startingBlockId = 2700;
 		int itemID = 18755;
-		flintWand = ItemHelper.createItem(MOD_ID,new ItemWand("flintwand", itemID++,2, ToolMaterial.wood, 1),"flintwand","flintwand.png");
-		quartzWand = ItemHelper.createItem(MOD_ID,new ItemWand("quartzwand", itemID++,2, ToolMaterial.iron, 3),"quartzwand","quartzwand.png");
-		olivineWand = ItemHelper.createItem(MOD_ID,new ItemWand("olivinewand", itemID++,2, ToolMaterial.stone, 4),"olivinewand","olivinewand.png");
-		diamondWand = ItemHelper.createItem(MOD_ID,new ItemWand("diamondwand", itemID++,2, ToolMaterial.diamond, 5),"diamondwand","diamondwand.png");
+		flintWand = ItemHelper.createItem(MOD_ID,  new ItemWand("flintwand", itemID++,2, ToolMaterial.wood, 1),"flintwand.png");
+		quartzWand = ItemHelper.createItem(MOD_ID, new ItemWand("quartzwand", itemID++,2, ToolMaterial.iron, 3),"quartzwand.png");
+		olivineWand = ItemHelper.createItem(MOD_ID,new ItemWand("olivinewand", itemID++,2, ToolMaterial.stone, 4),"olivinewand.png");
+		diamondWand = ItemHelper.createItem(MOD_ID,new ItemWand("diamondwand", itemID++,2, ToolMaterial.diamond, 5),"diamondwand.png");
 	}
 
 	@Override
@@ -57,11 +57,11 @@ public class BTWands implements ModInitializer, GameStartEntrypoint, RecipeEntry
 			.setShape("  B", " S ", "S  ")
 			.addInput('B', Block.blockOlivine)
 			.addInput('S', Item.stick)
-			.create("toFlintWand", olivineWand.getDefaultStack());
+			.create("toOlivineWand", olivineWand.getDefaultStack());
 		RecipeBuilder.Shaped(MOD_ID)
 			.setShape("  B", " S ", "S  ")
 			.addInput('B', Block.blockDiamond)
 			.addInput('S', Item.stick)
-			.create("toFlintWand", diamondWand.getDefaultStack());
+			.create("toDiamondWand", diamondWand.getDefaultStack());
 	}
 }

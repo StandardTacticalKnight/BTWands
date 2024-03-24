@@ -3,7 +3,7 @@
   "id": "btwands",
   "version": "${version}",
 
-  "name": "Builder The Wands",
+  "name": "BTWands",
   "description": "This mod builds.",
   "authors": [
     "StandardTactical"
@@ -36,7 +36,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.13.3"
+    "fabricloader": ">=0.15.5"
   },
   "suggests": {
   }

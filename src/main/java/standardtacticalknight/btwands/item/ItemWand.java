@@ -55,7 +55,7 @@ public class ItemWand extends ItemTool {
 					break; //if we cant find an item to consume then stop
 				}
 			}
-			world.playBlockSoundEffect((float)blockX + 0.5f, (float)blockY + 0.5f, (float)blockZ + 0.5f, blockFinder.origin, EnumBlockSoundEffectType.PLACE);
+			world.playBlockSoundEffect(entityplayer,(double)blockX + 0.5f, (double)blockY + 0.5f, (double)blockZ + 0.5f, blockFinder.origin, EnumBlockSoundEffectType.PLACE);
 		}
 		return true;
 	}
