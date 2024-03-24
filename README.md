@@ -6,6 +6,9 @@ Does what it says on the tin, craft the new wands at the workbench
 
 Change placement mode by **sneak right click**
 
+## HalpLibe
+halplibe version 3.4.17+ **required** to prevent crash on startup!
+
 ### Wand Tiers:
 
 ![flintwand.png](src%2Fmain%2Fresources%2Fassets%2Fbtwands%2Fitem%2Fflintwand.png)**Flint**: 3x3 range, **low** durability
