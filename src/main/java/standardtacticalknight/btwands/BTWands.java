@@ -64,4 +64,9 @@ public class BTWands implements ModInitializer, GameStartEntrypoint, RecipeEntry
 			.addInput('S', Item.stick)
 			.create("toDiamondWand", diamondWand.getDefaultStack());
 	}
+
+	@Override
+	public void initNamespaces() {
+
+	}
 }
