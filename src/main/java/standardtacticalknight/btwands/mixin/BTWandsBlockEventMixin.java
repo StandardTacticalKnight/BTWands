@@ -28,9 +28,8 @@ public class BTWandsBlockEventMixin {
 	private Minecraft mc;
 	@Shadow
 	private World worldObj;
-	@Inject(method = "drawSelectionBox", at =  @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;setBlockBoundsBasedOnState(Lnet/minecraft/core/world/World;III)V"))
+	@Inject(method = "drawSelectionBox", at =  @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;setBlockBoundsBasedOnState(Lnet/minecraft/core/world/WorldSource;III)V"))
 	private void BTWandOverlayRender(ICamera camera, HitResult hitResult, float partialTick, CallbackInfo ci) {
-
 		ItemStack heldItem = this.mc.thePlayer.inventory.getCurrentItem(); //get held item
 		if (heldItem != null && heldItem.getItem() instanceof ItemWand) { //if it's a wand then find placeable spots to draw
 			WandBlockFinder blockFinder = new WandBlockFinder(worldObj, mc.thePlayer);
