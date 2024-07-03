@@ -36,7 +36,8 @@ public class ItemWand extends ItemTool {
 		this.setMaxDamage(toolMaterial.getDurability()*4);
 	}
 	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int blockX, int blockY, int blockZ, Side side, double xPlaced, double yPlaced) {
+	public boolean onUseItemOnBlock(ItemStack itemstack, EntityPlayer entityplayer, World world, int blockX, int blockY, int blockZ, Side side, double xPlaced, double yPlaced) {
+	    if (world.isClientSide) return true;
 		WandBlockFinder blockFinder = new WandBlockFinder(world, entityplayer);
 		HitResult hitResult = new HitResult(blockX, blockY, blockZ, side, Vec3d.createVector(blockX, blockY, blockZ));
 		LinkedList<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult,this.range, this.mode);//generate the block list for placement
@@ -61,8 +62,8 @@ public class ItemWand extends ItemTool {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if(entityplayer.isSneaking()){
+	public ItemStack onUseItem(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+		if (entityplayer.isSneaking()) {
 			switch(this.mode) {
 				case OPEN:
 					this.mode = Mode.VERTICAL;
@@ -75,7 +76,7 @@ public class ItemWand extends ItemTool {
 					break;
 			}
 
-			entityplayer.addChatMessage("Wand mode: "+this.mode);
+			entityplayer.sendMessage("Wand mode: "+this.mode);
 		}
 		return itemstack;
 	}

@@ -7,7 +7,7 @@ import net.minecraft.core.item.material.ToolMaterial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import standardtacticalknight.btwands.item.ItemWand;
-import turniplabs.halplibe.helper.ItemHelper;
+import turniplabs.halplibe.helper.ItemBuilder;
 import turniplabs.halplibe.helper.RecipeBuilder;
 import turniplabs.halplibe.util.GameStartEntrypoint;
 import turniplabs.halplibe.util.RecipeEntrypoint;
@@ -30,10 +30,18 @@ public class BTWands implements ModInitializer, GameStartEntrypoint, RecipeEntry
 	public void beforeGameStart() {
 		int startingBlockId = 2700;
 		int itemID = 18755;
-		flintWand = ItemHelper.createItem(MOD_ID,  new ItemWand("flintwand", itemID++,2, ToolMaterial.wood, 1),"flintwand.png");
-		quartzWand = ItemHelper.createItem(MOD_ID, new ItemWand("quartzwand", itemID++,2, ToolMaterial.iron, 3),"quartzwand.png");
-		olivineWand = ItemHelper.createItem(MOD_ID,new ItemWand("olivinewand", itemID++,2, ToolMaterial.stone, 4),"olivinewand.png");
-		diamondWand = ItemHelper.createItem(MOD_ID,new ItemWand("diamondwand", itemID++,2, ToolMaterial.diamond, 5),"diamondwand.png");
+		flintWand = new ItemBuilder(MOD_ID)
+		    .setIcon("btwands:item/flintwand")
+		    .build(new ItemWand("flintwand", itemID++, 2, ToolMaterial.wood, 1));
+		quartzWand = new ItemBuilder(MOD_ID)
+            .setIcon("btwands:item/quartzwand")
+            .build(new ItemWand("quartzwand", itemID++, 2, ToolMaterial.iron, 3));
+		olivineWand = new ItemBuilder(MOD_ID)
+            .setIcon("btwands:item/olivinewand")
+            .build(new ItemWand("olivinewand", itemID++, 2, ToolMaterial.stone, 4));
+		diamondWand = new ItemBuilder(MOD_ID)
+            .setIcon("btwands:item/diamondwand")
+            .build(new ItemWand("diamondwand", itemID++, 2, ToolMaterial.diamond, 5));
 	}
 
 	@Override
