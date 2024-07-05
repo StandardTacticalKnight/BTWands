@@ -75,6 +75,6 @@ public class BTWands implements ModInitializer, GameStartEntrypoint, RecipeEntry
 
 	@Override
 	public void initNamespaces() {
-
+		RecipeBuilder.initNameSpace(MOD_ID);
 	}
 }
