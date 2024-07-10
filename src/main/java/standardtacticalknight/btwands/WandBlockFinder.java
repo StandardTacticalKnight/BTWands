@@ -138,8 +138,7 @@ public class WandBlockFinder {
 			if (base != null && base.blockMaterial.isSolid() && base.id == this.origin.id) { //is foundation there and also same block as origin
 				BlockPos3D placePos = candidate.move(side);
 				if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
-					Block place = Block.blocksList[world.getBlockId(placePos.x, placePos.y, placePos.z)];
-					if (place == null || place.blockMaterial.isReplaceable()) { //is place area air or replaceable block
+					if (world.canBlockBePlacedAt(base.id,placePos.x,placePos.y,placePos.z,false,side)) { //is place area air or replaceable block and is free of entities
 						return true;
 					}
 				}
