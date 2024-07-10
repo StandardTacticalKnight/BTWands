@@ -3,6 +3,7 @@ package standardtacticalknight.btwands.item;
 import net.minecraft.client.entity.player.EntityPlayerSP;
 import net.minecraft.core.HitResult;
 import net.minecraft.core.block.Block;
+import net.minecraft.core.block.tag.BlockTags;
 import net.minecraft.core.data.tag.Tag;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.enums.EnumBlockSoundEffectType;
@@ -21,7 +22,7 @@ import java.util.LinkedList;
 
 public class ItemWand extends ItemTool {
 
-	private static final Tag<Block> tagEffectiveAgainst = null;
+	private static final Tag<Block> tagEffectiveAgainst = BlockTags.MINEABLE_BY_SHOVEL;
 	private final int range;
 	public enum Mode {
 		OPEN,
@@ -102,6 +103,11 @@ public class ItemWand extends ItemTool {
 		}
 		if (player.getGamemode().consumeBlocks() && --player.inventory.mainInventory[selectedSlot].stackSize <= 0) {
 			player.inventory.mainInventory[selectedSlot] = null;
+		}
+		if(player instanceof EntityPlayerMP){
+			BTWands.LOGGER.info("MP");
+			//((EntityPlayerMP) player).updateInventorySlot(player.inventorySlots,selectedSlot,player.inventory.mainInventory[selectedSlot]);
+			((EntityPlayerMP) player).inventorySlots.updateInventory();//TODO: this function is a bit heavy, as it checks all your inventory slots for changes rather than the function above which directly updates the one slot which would be better performance wise
 		}
 		return true;
     }
