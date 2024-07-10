@@ -105,7 +105,6 @@ public class ItemWand extends ItemTool {
 			player.inventory.mainInventory[selectedSlot] = null;
 		}
 		if(player instanceof EntityPlayerMP){
-			BTWands.LOGGER.info("MP");
 			//((EntityPlayerMP) player).updateInventorySlot(player.inventorySlots,selectedSlot,player.inventory.mainInventory[selectedSlot]);
 			((EntityPlayerMP) player).inventorySlots.updateInventory();//TODO: this function is a bit heavy, as it checks all your inventory slots for changes rather than the function above which directly updates the one slot which would be better performance wise
 		}
