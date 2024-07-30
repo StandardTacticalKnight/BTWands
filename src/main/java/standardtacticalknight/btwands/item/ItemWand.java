@@ -10,10 +10,12 @@ import net.minecraft.core.enums.EnumBlockSoundEffectType;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.item.material.ToolMaterial;
 import net.minecraft.core.item.tool.ItemTool;
+import net.minecraft.core.net.packet.Packet54PlayNoteBlock;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.util.phys.Vec3d;
 import net.minecraft.core.world.World;
 import net.minecraft.server.entity.player.EntityPlayerMP;
+import net.minecraft.server.world.WorldServer;
 import standardtacticalknight.btwands.BTWands;
 import standardtacticalknight.btwands.BlockPos3D;
 import standardtacticalknight.btwands.WandBlockFinder;
@@ -57,6 +59,11 @@ public class ItemWand extends ItemTool {
 					break; //if we cant find an item to consume then stop
 				}
 			}
+			if(entityplayer instanceof EntityPlayerMP && world instanceof WorldServer){//update clientside if on a server
+				((EntityPlayerMP) entityplayer).inventorySlots.updateInventory();//could be optimized
+				//((WorldServer)world).triggerEvent(blockX, blockY, blockZ, 0, 0);
+				//((WorldServer)world).mcServer.playerList.sendPacketToPlayersAroundPoint(blockX, blockY, blockZ, 64.0, world.dimension.id, new Packet54PlayNoteBlock(blockX, blockY, blockZ, 1, 1));
+			}
 			world.playBlockSoundEffect(entityplayer,(double)blockX + 0.5f, (double)blockY + 0.5f, (double)blockZ + 0.5f, blockFinder.origin, EnumBlockSoundEffectType.PLACE);
 		}
 		return true;
@@ -76,7 +83,6 @@ public class ItemWand extends ItemTool {
 					this.mode = Mode.OPEN;
 					break;
 			}
-
 			entityplayer.sendMessage("Wand mode: "+this.mode);
 		}
 		return itemstack;
@@ -103,10 +109,6 @@ public class ItemWand extends ItemTool {
 		}
 		if (player.getGamemode().consumeBlocks() && --player.inventory.mainInventory[selectedSlot].stackSize <= 0) {
 			player.inventory.mainInventory[selectedSlot] = null;
-		}
-		if(player instanceof EntityPlayerMP){
-			//((EntityPlayerMP) player).updateInventorySlot(player.inventorySlots,selectedSlot,player.inventory.mainInventory[selectedSlot]);
-			((EntityPlayerMP) player).inventorySlots.updateInventory();//TODO: this function is a bit heavy, as it checks all your inventory slots for changes rather than the function above which directly updates the one slot which would be better performance wise
 		}
 		return true;
     }
