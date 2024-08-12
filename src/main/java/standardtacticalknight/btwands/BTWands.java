@@ -6,6 +6,7 @@ import net.minecraft.core.item.Item;
 import net.minecraft.core.item.material.ToolMaterial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import standardtacticalknight.btwands.item.ItemTrowel;
 import standardtacticalknight.btwands.item.ItemWand;
 import turniplabs.halplibe.helper.ItemBuilder;
 import turniplabs.halplibe.helper.RecipeBuilder;
@@ -21,6 +22,10 @@ public class BTWands implements ModInitializer, GameStartEntrypoint, RecipeEntry
 	public static Item quartzWand;
 	public static Item olivineWand;
 	public static Item diamondWand;
+	public static Item flintTrowel;
+	public static Item quartzTrowel;
+	public static Item olivineTrowel;
+	public static Item diamondTrowel;
     @Override
     public void onInitialize() {
         LOGGER.info("BTWands initialized.");
@@ -42,6 +47,18 @@ public class BTWands implements ModInitializer, GameStartEntrypoint, RecipeEntry
 		diamondWand = new ItemBuilder(MOD_ID)
             .setIcon("btwands:item/diamondwand")
             .build(new ItemWand("diamondwand", itemID++, 2, ToolMaterial.diamond, 5));
+		flintTrowel = new ItemBuilder(MOD_ID)
+			.setIcon("btwands:item/flintTrowel")
+			.build(new ItemTrowel("flinttrowel", itemID++, 2, ToolMaterial.wood, 1));
+		quartzTrowel = new ItemBuilder(MOD_ID)
+			.setIcon("btwands:item/quartzTrowel")
+			.build(new ItemTrowel("quartztrowel", itemID++, 2, ToolMaterial.iron, 3));
+		olivineTrowel = new ItemBuilder(MOD_ID)
+			.setIcon("btwands:item/olivineTrowel")
+			.build(new ItemTrowel("olivinetrowel", itemID++, 2, ToolMaterial.stone, 4));
+		diamondTrowel = new ItemBuilder(MOD_ID)
+			.setIcon("btwands:item/diamondTrowel")
+			.build(new ItemTrowel("diamondtrowel", itemID++, 2, ToolMaterial.diamond, 5));
 	}
 
 	@Override

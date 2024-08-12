@@ -14,6 +14,7 @@ public class WandBlockFinder {
 
 	private final World world;
 	private final EntityPlayer player;
+	private final boolean trowelFlag;
 	private Side side = Side.NONE; //what side of the block the player is looking at, decides the plane where blocks are searched
 	public Block origin; //blocktype being looked at
 	public int meta; //metadata of the block being looked at
@@ -21,6 +22,12 @@ public class WandBlockFinder {
 	public WandBlockFinder(World world, EntityPlayer player) {
 		this.world = world;
 		this.player = player;
+		this.trowelFlag = false;
+	}
+	public WandBlockFinder(World world, EntityPlayer player, boolean trowelFlag) {
+		this.world = world;
+		this.player = player;
+		this.trowelFlag = trowelFlag;
 	}
 
 	/**
@@ -135,7 +142,7 @@ public class WandBlockFinder {
 	private Boolean CheckValid(BlockPos3D candidate){
 		if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
 			Block base = Block.blocksList[world.getBlockId(candidate.x, candidate.y, candidate.z)];
-			if (base != null && base.blockMaterial.isSolid() && base.id == this.origin.id) { //is foundation there and also same block as origin
+			if (base != null && base.blockMaterial.isSolid() && (base.id == this.origin.id||trowelFlag)) { //is foundation there and also same block as origin
 				BlockPos3D placePos = candidate.move(side);
 				if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
 					if (world.canBlockBePlacedAt(base.id,placePos.x,placePos.y,placePos.z,false,side)) { //is place area air or replaceable block and is free of entities

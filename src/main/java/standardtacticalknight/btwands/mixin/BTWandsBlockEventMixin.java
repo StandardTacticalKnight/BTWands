@@ -13,14 +13,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import standardtacticalknight.btwands.BTWands;
 import standardtacticalknight.btwands.BlockPos3D;
 import standardtacticalknight.btwands.WandBlockFinder;
+import standardtacticalknight.btwands.item.ItemTrowel;
 import standardtacticalknight.btwands.item.ItemWand;
 
 import java.util.LinkedList;
-
-import static org.lwjgl.input.Keyboard.getEventKey;
 
 @Mixin(value = RenderGlobal.class, remap = false)
 public class BTWandsBlockEventMixin {
@@ -32,7 +30,7 @@ public class BTWandsBlockEventMixin {
 	private void BTWandOverlayRender(ICamera camera, HitResult hitResult, float partialTick, CallbackInfo ci) {
 		ItemStack heldItem = this.mc.thePlayer.inventory.getCurrentItem(); //get held item
 		if (heldItem != null && heldItem.getItem() instanceof ItemWand) { //if it's a wand then find placeable spots to draw
-			WandBlockFinder blockFinder = new WandBlockFinder(worldObj, mc.thePlayer);
+			WandBlockFinder blockFinder = new WandBlockFinder(worldObj, mc.thePlayer, heldItem.getItem() instanceof ItemTrowel);
 			LinkedList<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult, ((ItemWand) heldItem.getItem()).getRange(),((ItemWand) heldItem.getItem()).getMode()); //find em based on held item's range TODO: fix this mess...
 			if (!blocks.isEmpty()) {
 				AABB aabb;

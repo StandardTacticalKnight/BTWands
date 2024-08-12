@@ -10,7 +10,6 @@ import net.minecraft.core.enums.EnumBlockSoundEffectType;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.item.material.ToolMaterial;
 import net.minecraft.core.item.tool.ItemTool;
-import net.minecraft.core.net.packet.Packet54PlayNoteBlock;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.util.phys.Vec3d;
 import net.minecraft.core.world.World;
@@ -31,7 +30,7 @@ public class ItemWand extends ItemTool {
 		HORIZONTAL,
 		VERTICAL
 	}
-	private Mode mode = Mode.OPEN;
+	Mode mode = Mode.OPEN;
 
 	public ItemWand(String name, int id, int damageDealt, ToolMaterial toolMaterial, int range) {
 		super(name, id, damageDealt, toolMaterial, tagEffectiveAgainst);
@@ -102,7 +101,7 @@ public class ItemWand extends ItemTool {
 	 * @param itemMeta
 	 * @return success or failure to find or consume item
 	 */
-	private boolean consumeItem(EntityPlayer player, int itemID, int itemMeta){
+	boolean consumeItem(EntityPlayer player, int itemID, int itemMeta){
 		int selectedSlot = getInventorySlot(player, itemID, itemMeta);
 		if (selectedSlot < 0) {
 			return false;
@@ -120,7 +119,7 @@ public class ItemWand extends ItemTool {
 	 * @param itemMeta item metadata
 	 * @return inventory slot where item is contained, or -1 otherwise
 	 */
-	private int getInventorySlot(EntityPlayer player,  int itemID, int itemMeta){
+	int getInventorySlot(EntityPlayer player, int itemID, int itemMeta){
 		for (int j = 0; j < player.inventory.mainInventory.length; ++j) {
 			if (player.inventory.mainInventory[j] == null || player.inventory.mainInventory[j].itemID != itemID || player.inventory.mainInventory[j].getMetadata() != itemMeta) continue;
 			return j;
@@ -134,7 +133,7 @@ public class ItemWand extends ItemTool {
 	 * @param item itemstack to be refunded to the player
 	 * @return success or failure
 	 */
-	private boolean refundItem(EntityPlayer player, ItemStack item){
+	boolean refundItem(EntityPlayer player, ItemStack item){
 		if (player instanceof EntityPlayerSP) {
 			player.inventory.insertItem(item, true);
 			if (item.stackSize > 0) {
