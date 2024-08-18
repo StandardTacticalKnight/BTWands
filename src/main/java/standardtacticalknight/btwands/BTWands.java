@@ -89,22 +89,22 @@ public class BTWands implements ModInitializer, GameStartEntrypoint, RecipeEntry
 			.addInput('S', Item.stick)
 			.create("toDiamondWand", diamondWand.getDefaultStack());
 		RecipeBuilder.Shaped(MOD_ID)
-			.setShape("B  ", " S ", "  S")
+			.setShape("S  ", " S ", "  B")
 			.addInput('B', Item.flint)
 			.addInput('S', Item.stick)
 			.create("toFlintTrowel", flintTrowel.getDefaultStack());
 		RecipeBuilder.Shaped(MOD_ID)
-			.setShape("B  ", " S ", "  S")
+			.setShape("S  ", " S ", "  B")
 			.addInput('B', Block.blockQuartz)
 			.addInput('S', Item.stick)
 			.create("toQuartzTrowel", quartzTrowel.getDefaultStack());
 		RecipeBuilder.Shaped(MOD_ID)
-			.setShape("B  ", " S ", "  S")
+			.setShape("S  ", " S ", "  B")
 			.addInput('B', Block.blockOlivine)
 			.addInput('S', Item.stick)
 			.create("toOlivineTrowel", olivineTrowel.getDefaultStack());
 		RecipeBuilder.Shaped(MOD_ID)
-			.setShape("B  ", " S ", "  S")
+			.setShape("S  ", " S ", "  B")
 			.addInput('B', Block.blockDiamond)
 			.addInput('S', Item.stick)
 			.create("toDiamondTrowel", diamondTrowel.getDefaultStack());
