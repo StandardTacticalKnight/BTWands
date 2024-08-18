@@ -48,16 +48,16 @@ public class BTWands implements ModInitializer, GameStartEntrypoint, RecipeEntry
             .setIcon("btwands:item/diamondwand")
             .build(new ItemWand("diamondwand", itemID++, 2, ToolMaterial.diamond, 5));
 		flintTrowel = new ItemBuilder(MOD_ID)
-			.setIcon("btwands:item/flintTrowel")
+			.setIcon("btwands:item/flinttrowel")
 			.build(new ItemTrowel("flinttrowel", itemID++, 2, ToolMaterial.wood, 0));
 		quartzTrowel = new ItemBuilder(MOD_ID)
-			.setIcon("btwands:item/quartzTrowel")
+			.setIcon("btwands:item/quartztrowel")
 			.build(new ItemTrowel("quartztrowel", itemID++, 2, ToolMaterial.iron, 1));
 		olivineTrowel = new ItemBuilder(MOD_ID)
-			.setIcon("btwands:item/olivineTrowel")
+			.setIcon("btwands:item/olivinetrowel")
 			.build(new ItemTrowel("olivinetrowel", itemID++, 2, ToolMaterial.stone, 3));
 		diamondTrowel = new ItemBuilder(MOD_ID)
-			.setIcon("btwands:item/diamondTrowel")
+			.setIcon("btwands:item/diamondtrowel")
 			.build(new ItemTrowel("diamondtrowel", itemID++, 2, ToolMaterial.diamond, 4));
 	}
 
