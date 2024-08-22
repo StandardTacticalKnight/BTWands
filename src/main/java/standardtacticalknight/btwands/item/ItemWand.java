@@ -7,6 +7,7 @@ import net.minecraft.core.block.tag.BlockTags;
 import net.minecraft.core.data.tag.Tag;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.enums.EnumBlockSoundEffectType;
+import net.minecraft.core.enums.EnumDropCause;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.item.material.ToolMaterial;
 import net.minecraft.core.item.tool.ItemTool;
@@ -43,16 +44,18 @@ public class ItemWand extends ItemTool {
 		WandBlockFinder blockFinder = new WandBlockFinder(world, entityplayer);
 		HitResult hitResult = new HitResult(blockX, blockY, blockZ, side, Vec3d.createVector(blockX, blockY, blockZ));
 		LinkedList<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult,this.range, this.mode);//generate the block list for placement
-		if (!blocks.isEmpty() && getInventorySlot(entityplayer,blockFinder.origin.id,blockFinder.meta)!=-1) { //if there is at least one placeable block and at least one of that item in the player's inventory
+
+		ItemStack[] result = blockFinder.origin.getBreakResult(world, EnumDropCause.PICK_BLOCK, blockX, blockY, blockZ, blockFinder.originMeta, blockFinder.originTileEntity);
+		if (!blocks.isEmpty() && getInventorySlot(entityplayer, result[0])!=-1) { //if there is at least one placeable block and at least one of that item in the player's inventory
 			for (BlockPos3D block : blocks) {
-				if(consumeItem(entityplayer,blockFinder.origin.id,blockFinder.meta)){ //try to take one item from the player's inv and place it in the world
+				if(consumeItem(entityplayer, result[0])){ //try to take one item from the player's inv and place it in the world
 					world.editingBlocks = true;
-					boolean placed = world.setBlockAndMetadataWithNotify(block.x, block.y, block.z, blockFinder.origin.id, blockFinder.meta);
+					boolean placed = world.setBlockAndMetadataWithNotify(block.x, block.y, block.z, blockFinder.origin.id, blockFinder.originMeta);
 					world.editingBlocks = false;
 					world.notifyBlocksOfNeighborChange(block.x, block.y, block.z, blockFinder.origin.id);
 					if(!placed){
 						BTWands.LOGGER.warn("refunded item, this should not happen in normal conditions");
-						refundItem(entityplayer,new ItemStack(blockFinder.origin,1,blockFinder.meta)); //if placing the block fails, refund the item
+						refundItem(entityplayer,new ItemStack(blockFinder.origin,1,blockFinder.originMeta)); //if placing the block fails, refund the item
 					}else itemstack.damageItem(1, entityplayer); //use up the durability for every block placed
 				}else{
 					break; //if we cant find an item to consume then stop
@@ -96,13 +99,11 @@ public class ItemWand extends ItemTool {
 
 	/**
 	 * Consumes a single item from player inventory
-	 * @param player
-	 * @param itemID
-	 * @param itemMeta
+	 *
 	 * @return success or failure to find or consume item
 	 */
-	boolean consumeItem(EntityPlayer player, int itemID, int itemMeta){
-		int selectedSlot = getInventorySlot(player, itemID, itemMeta);
+	boolean consumeItem(EntityPlayer player, ItemStack itemStack){
+		int selectedSlot = getInventorySlot(player, itemStack);
 		if (selectedSlot < 0) {
 			return false;
 		}
@@ -114,14 +115,13 @@ public class ItemWand extends ItemTool {
 
 	/**
 	 * Searches player inventory for specified item + meta
-	 * @param player
-	 * @param itemID
-	 * @param itemMeta item metadata
+	 *
 	 * @return inventory slot where item is contained, or -1 otherwise
 	 */
-	int getInventorySlot(EntityPlayer player, int itemID, int itemMeta){
+	int getInventorySlot(EntityPlayer player, ItemStack itemStack){
 		for (int j = 0; j < player.inventory.mainInventory.length; ++j) {
-			if (player.inventory.mainInventory[j] == null || player.inventory.mainInventory[j].itemID != itemID || player.inventory.mainInventory[j].getMetadata() != itemMeta) continue;
+			if (player.inventory.mainInventory[j] == null || player.inventory.mainInventory[j].itemID != itemStack.itemID && player.inventory.mainInventory[j].getMetadata() != itemStack.getMetadata()) continue;
+			//if (player.inventory.mainInventory[j].getMetadata() != itemMeta) continue;
 			return j;
 		}
 		return -1;

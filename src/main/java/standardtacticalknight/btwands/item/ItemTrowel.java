@@ -36,7 +36,9 @@ public class ItemTrowel extends ItemWand {
 				ItemStack chosenItem = hotbarBlocks.get(rand.nextInt(hotbarBlocks.size()));// grab a random block from the player's hotbar
 				int chosenId = chosenItem.itemID;
 				int chosenMeta = chosenItem.getMetadata();
-				if(consumeItem(entityplayer,chosenId,chosenMeta)){ //try to take one item from the player's inv and place it in the world
+
+
+				if(consumeItem(entityplayer, chosenItem)){ //try to take one item from the player's inv and place it in the world
 					world.editingBlocks = true;
 					boolean placed = world.setBlockAndMetadataWithNotify(block.x, block.y, block.z, chosenId, chosenMeta);
 					world.editingBlocks = false;

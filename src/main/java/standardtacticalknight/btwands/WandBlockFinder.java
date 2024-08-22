@@ -2,6 +2,7 @@ package standardtacticalknight.btwands;
 
 import net.minecraft.core.HitResult;
 import net.minecraft.core.block.Block;
+import net.minecraft.core.block.entity.TileEntity;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.util.helper.Direction;
 import net.minecraft.core.util.helper.Side;
@@ -17,7 +18,8 @@ public class WandBlockFinder {
 	private final boolean trowelFlag;
 	private Side side = Side.NONE; //what side of the block the player is looking at, decides the plane where blocks are searched
 	public Block origin; //blocktype being looked at
-	public int meta; //metadata of the block being looked at
+	public int originMeta; //metadata of the block being looked at
+	public TileEntity originTileEntity;
 
 	public WandBlockFinder(World world, EntityPlayer player) {
 		this.world = world;
@@ -39,8 +41,9 @@ public class WandBlockFinder {
 	public LinkedList<BlockPos3D> getBlockPositionList(HitResult hitresult, int range, ItemWand.Mode mode){
 		//add the block looked at (moved 1 in face direction) to the place list
 		this.side = hitresult.side;
-		this.origin = Block.blocksList[world.getBlockId(hitresult.x, hitresult.y, hitresult.z)];
-		this.meta = world.getBlockMetadata(hitresult.x, hitresult.y, hitresult.z);
+		this.origin = world.getBlock(hitresult.x, hitresult.y, hitresult.z);
+		this.originMeta = world.getBlockMetadata(hitresult.x, hitresult.y, hitresult.z);
+		this.originTileEntity = this.world.getBlockTileEntity(hitresult.x, hitresult.y, hitresult.z);
 		LinkedList<BlockPos3D> blocksToPlace = new LinkedList<>();
 		//direction masks for wand placement
 		int xMask, yMask, zMask;
