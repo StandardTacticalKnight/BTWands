@@ -3,7 +3,8 @@ package standardtacticalknight.btwands.mixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.RenderGlobal;
 import net.minecraft.client.render.camera.ICamera;
-import net.minecraft.core.HitResult;
+import net.minecraft.client.world.WorldClient;
+import net.minecraft.core.util.phys.HitResult;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.World;
@@ -25,8 +26,8 @@ public class BTWandsBlockEventMixin {
 	@Shadow
 	private Minecraft mc;
 	@Shadow
-	private World worldObj;
-	@Inject(method = "drawSelectionBox", at =  @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;setBlockBoundsBasedOnState(Lnet/minecraft/core/world/WorldSource;III)V"))
+	private WorldClient worldObj;
+	@Inject(method = "drawSelectionBox", at =  @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;getBoundingVolume(Lnet/minecraft/core/world/World;III)Lnet/minecraft/core/util/phys/BoundingVolume;"))
 	private void BTWandOverlayRender(ICamera camera, HitResult hitResult, float partialTick, CallbackInfo ci) {
 		ItemStack heldItem = this.mc.thePlayer.inventory.getCurrentItem(); //get held item
 		if (heldItem != null && heldItem.getItem() instanceof ItemWand) { //if it's a wand then find placeable spots to draw
@@ -38,8 +39,8 @@ public class BTWandsBlockEventMixin {
 				double offsetX = camera.getX(partialTick), offsetY = camera.getY(partialTick), offsetZ = camera.getZ(partialTick); //do necessary camera offset stuffs
 				GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.6f); //make white selection boxes
 				for (BlockPos3D block : blocks) { //draw 'em
-					aabb = new AABB(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1);
-					thisObject.drawOutlinedBoundingBox(aabb.getOffsetBoundingBox(-offsetX, -offsetY, -offsetZ).expand(0.0002f, 0.0002f, 0.0002f)); //tiny .expand to stop z fighting
+					aabb = AABB.getTemporaryBB(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1);
+					thisObject.drawOutlinedBoundingBox(aabb.getInsetBoundingBox(-offsetX, -offsetY, -offsetZ).expand(0.0002f, 0.0002f, 0.0002f)); //tiny .expand to stop z fighting
 				}
 			}
 			GL11.glColor4f(0.0f, 0.0f, 0.0f, 0.35f + this.mc.getOutlineWidth() * 0.3f);//reset color TODO: remove need for this

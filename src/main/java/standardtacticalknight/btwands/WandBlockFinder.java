@@ -1,11 +1,13 @@
 package standardtacticalknight.btwands;
 
-import net.minecraft.core.HitResult;
+
 import net.minecraft.core.block.Block;
+import net.minecraft.core.block.Blocks;
 import net.minecraft.core.block.entity.TileEntity;
-import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.util.helper.Direction;
 import net.minecraft.core.util.helper.Side;
+import net.minecraft.core.util.phys.HitResult;
 import net.minecraft.core.world.World;
 import standardtacticalknight.btwands.item.ItemWand;
 
@@ -14,19 +16,19 @@ import java.util.LinkedList;
 public class WandBlockFinder {
 
 	private final World world;
-	private final EntityPlayer player;
+	private final Player player;
 	private final boolean trowelFlag;
 	private Side side = Side.NONE; //what side of the block the player is looking at, decides the plane where blocks are searched
 	public Block origin; //blocktype being looked at
 	public int originMeta; //metadata of the block being looked at
 	public TileEntity originTileEntity;
 
-	public WandBlockFinder(World world, EntityPlayer player) {
+	public WandBlockFinder(World world, Player player) {
 		this.world = world;
 		this.player = player;
 		this.trowelFlag = false;
 	}
-	public WandBlockFinder(World world, EntityPlayer player, boolean trowelFlag) {
+	public WandBlockFinder(World world, Player player, boolean trowelFlag) {
 		this.world = world;
 		this.player = player;
 		this.trowelFlag = trowelFlag;
@@ -43,7 +45,7 @@ public class WandBlockFinder {
 		this.side = hitresult.side;
 		this.origin = world.getBlock(hitresult.x, hitresult.y, hitresult.z);
 		this.originMeta = world.getBlockMetadata(hitresult.x, hitresult.y, hitresult.z);
-		this.originTileEntity = this.world.getBlockTileEntity(hitresult.x, hitresult.y, hitresult.z);
+		this.originTileEntity = this.world.getTileEntity(hitresult.x, hitresult.y, hitresult.z);
 		LinkedList<BlockPos3D> blocksToPlace = new LinkedList<>();
 		//direction masks for wand placement
 		int xMask, yMask, zMask;
@@ -144,11 +146,11 @@ public class WandBlockFinder {
 	 */
 	private Boolean CheckValid(BlockPos3D candidate){
 		if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
-			Block base = Block.blocksList[world.getBlockId(candidate.x, candidate.y, candidate.z)];
-			if (base != null && base.blockMaterial.isSolid() && (base.id == this.origin.id||trowelFlag)) { //is foundation there and also same block as origin
+			Block base = Blocks.blocksList[world.getBlockId(candidate.x, candidate.y, candidate.z)];
+			if (base != null && base.isSolidRender() && (base.id() == this.origin.id()||trowelFlag)) { //is foundation there and also same block as origin
 				BlockPos3D placePos = candidate.move(side);
 				if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
-					if (world.canBlockBePlacedAt(base.id,placePos.x,placePos.y,placePos.z,false,side)) { //is place area air or replaceable block and is free of entities
+					if (world.canBlockBePlacedAt(base.id(),placePos.x,placePos.y,placePos.z,false,side)) { //is place area air or replaceable block and is free of entities
 						return true;
 					}
 				}
