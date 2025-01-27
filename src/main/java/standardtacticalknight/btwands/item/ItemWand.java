@@ -105,6 +105,7 @@ public class ItemWand extends ItemTool {
 	 * @return success or failure to find or consume item
 	 */
 	boolean consumeItem(Player player, ItemStack itemStack){
+		BTWands.LOGGER.info("looking for:" + itemStack.getItemKey());
 		int selectedSlot = getInventorySlot(player, itemStack);
 		if (selectedSlot < 0) {
 			return false;
@@ -122,7 +123,7 @@ public class ItemWand extends ItemTool {
 	 */
 	int getInventorySlot(Player player, ItemStack itemStack){
 		for (int j = 0; j < player.inventory.mainInventory.length; ++j) {
-			if (player.inventory.mainInventory[j] == null || player.inventory.mainInventory[j].itemID != itemStack.itemID && player.inventory.mainInventory[j].getMetadata() != itemStack.getMetadata()) continue;
+			if (player.inventory.mainInventory[j] == null || player.inventory.mainInventory[j].itemID != itemStack.itemID || player.inventory.mainInventory[j].getMetadata() != itemStack.getMetadata()) continue;
 			//if (player.inventory.mainInventory[j].getMetadata() != itemMeta) continue;
 			return j;
 		}

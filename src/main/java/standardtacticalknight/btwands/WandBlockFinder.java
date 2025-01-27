@@ -4,6 +4,7 @@ package standardtacticalknight.btwands;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.Blocks;
 import net.minecraft.core.block.entity.TileEntity;
+import net.minecraft.core.block.tag.BlockTags;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.util.helper.Direction;
 import net.minecraft.core.util.helper.Side;
@@ -146,8 +147,8 @@ public class WandBlockFinder {
 	 */
 	private Boolean CheckValid(BlockPos3D candidate){
 		if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
-			Block base = Blocks.blocksList[world.getBlockId(candidate.x, candidate.y, candidate.z)];
-			if (base != null && base.isSolidRender() && (base.id() == this.origin.id()||trowelFlag)) { //is foundation there and also same block as origin
+			Block<?> base = Blocks.blocksList[world.getBlockId(candidate.x, candidate.y, candidate.z)];
+			if (base != null && !base.hasTag(BlockTags.PLACE_OVERWRITES) && (base.id() == this.origin.id() || trowelFlag)) { //is foundation there and also same block as origin
 				BlockPos3D placePos = candidate.move(side);
 				if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
 					if (world.canBlockBePlacedAt(base.id(),placePos.x,placePos.y,placePos.z,false,side)) { //is place area air or replaceable block and is free of entities

@@ -27,7 +27,7 @@ public class BTWandsBlockEventMixin {
 	private Minecraft mc;
 	@Shadow
 	private WorldClient worldObj;
-	@Inject(method = "drawSelectionBox", at =  @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;getBoundingVolume(Lnet/minecraft/core/world/World;III)Lnet/minecraft/core/util/phys/BoundingVolume;"))
+	@Inject(method = "drawSelectionBox", at =  @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderGlobal;drawOutlinedBoundingBox(Lnet/minecraft/core/util/phys/AABB;)V"))
 	private void BTWandOverlayRender(ICamera camera, HitResult hitResult, float partialTick, CallbackInfo ci) {
 		ItemStack heldItem = this.mc.thePlayer.inventory.getCurrentItem(); //get held item
 		if (heldItem != null && heldItem.getItem() instanceof ItemWand) { //if it's a wand then find placeable spots to draw
@@ -40,7 +40,7 @@ public class BTWandsBlockEventMixin {
 				GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.6f); //make white selection boxes
 				for (BlockPos3D block : blocks) { //draw 'em
 					aabb = AABB.getTemporaryBB(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1);
-					thisObject.drawOutlinedBoundingBox(aabb.getInsetBoundingBox(-offsetX, -offsetY, -offsetZ).expand(0.0002f, 0.0002f, 0.0002f)); //tiny .expand to stop z fighting
+					thisObject.drawOutlinedBoundingBox(aabb.cloneMove(-offsetX, -offsetY, -offsetZ).expand(0.0002f, 0.0002f, 0.0002f)); //tiny .expand to stop z fighting
 				}
 			}
 			GL11.glColor4f(0.0f, 0.0f, 0.0f, 0.35f + this.mc.getOutlineWidth() * 0.3f);//reset color TODO: remove need for this
