@@ -4,7 +4,7 @@
   "package": "standardtacticalknight.btwands.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BTWandsBlockEventMixin"
+    "RenderGlobalMixin"
   ],
   "client": [
   ],

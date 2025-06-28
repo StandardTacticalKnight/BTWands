@@ -16,13 +16,10 @@ import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.util.phys.HitResult;
 import net.minecraft.core.util.phys.Vec3;
 import net.minecraft.core.world.World;
-import net.minecraft.server.entity.player.PlayerServer;
-import net.minecraft.server.world.WorldServer;
 import standardtacticalknight.btwands.BTWands;
 import standardtacticalknight.btwands.BlockPos3D;
 import standardtacticalknight.btwands.WandBlockFinder;
-
-import java.util.LinkedList;
+import java.util.List;
 
 public class ItemWand extends ItemTool {
 
@@ -45,31 +42,34 @@ public class ItemWand extends ItemTool {
 	    if (world.isClientSide) return true;
 		WandBlockFinder blockFinder = new WandBlockFinder(world, entityplayer);
 		HitResult hitResult = new HitResult(blockX, blockY, blockZ, side, Vec3.getTempVec3(blockX, blockY, blockZ));
-		LinkedList<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult,this.range, this.mode);//generate the block list for placement
+		List<BlockPos3D> blocks = blockFinder.getBlockPositionList(hitResult,this.range, this.mode);//generate the block list for placement
 
 		ItemStack[] result = blockFinder.origin.getBreakResult(world, EnumDropCause.PICK_BLOCK, blockX, blockY, blockZ, blockFinder.originMeta, blockFinder.originTileEntity);
-		if (!blocks.isEmpty() && getInventorySlot(entityplayer, result[0])!=-1) { //if there is at least one placeable block and at least one of that item in the player's inventory
-			for (BlockPos3D block : blocks) {
-				if(consumeItem(entityplayer, result[0])){ //try to take one item from the player's inv and place it in the world
-					//world.editingBlocks = true;
-					boolean placed = world.setBlockAndMetadataWithNotify(block.x, block.y, block.z, blockFinder.origin.id(), blockFinder.originMeta);
-					//world.editingBlocks = false;
-					world.notifyBlocksOfNeighborChange(block.x, block.y, block.z, blockFinder.origin.id());
-					if(!placed){
-						BTWands.LOGGER.warn("refunded item, this should not happen in normal conditions");
-						refundItem(entityplayer,new ItemStack(blockFinder.origin,1,blockFinder.originMeta)); //if placing the block fails, refund the item
-					}else itemstack.damageItem(1, entityplayer); //use up the durability for every block placed
-				}else{
-					break; //if we cant find an item to consume then stop
-				}
+		if (blocks.isEmpty() || getInventorySlot(entityplayer, result[0]) == -1) return true;
+
+		// If there is at least one placeable block and at least one of that item in the player's inventory
+
+		for (BlockPos3D block : blocks) {
+			if (!consumeItem(entityplayer, result[0])) break; //if we cant find an item to consume then stop
+
+			// Try to take one item from the player's inv and place it in the world
+
+			boolean placed = world.setBlockAndMetadataWithNotify(block.x, block.y, block.z, blockFinder.origin.id(), blockFinder.originMeta);
+			world.notifyBlocksOfNeighborChange(block.x, block.y, block.z, blockFinder.origin.id());
+
+			if (!placed) {
+				BTWands.LOGGER.warn("refunded item, this should not happen in normal conditions");
+				refundItem(entityplayer,new ItemStack(blockFinder.origin,1,blockFinder.originMeta)); //if placing the block fails, refund the item
+				continue;
 			}
-			if(world instanceof WorldClientMP && entityplayer instanceof PlayerRemote){//update clientside if on a server
-				entityplayer.inventorySlots.broadcastChanges();//FIXME could be optimized
-				//((WorldServer)world).triggerEvent(blockX, blockY, blockZ, 0, 0);
-				//((WorldServer)world).mcServer.playerList.sendPacketToPlayersAroundPoint(blockX, blockY, blockZ, 64.0, world.dimension.id, new Packet54PlayNoteBlock(blockX, blockY, blockZ, 1, 1));
-			}
-			world.playBlockSoundEffect(entityplayer,(double)blockX + 0.5f, (double)blockY + 0.5f, (double)blockZ + 0.5f, blockFinder.origin, EnumBlockSoundEffectType.PLACE);
+
+			itemstack.damageItem(1, entityplayer); //use up the durability for every block placed
 		}
+		if(world instanceof WorldClientMP && entityplayer instanceof PlayerRemote){//update clientside if on a server
+			entityplayer.inventorySlots.broadcastChanges();//FIXME could be optimized
+		}
+		world.playBlockSoundEffect(entityplayer,(double)blockX + 0.5f, (double)blockY + 0.5f, (double)blockZ + 0.5f, blockFinder.origin, EnumBlockSoundEffectType.PLACE);
+
 		return true;
 	}
 
@@ -105,7 +105,7 @@ public class ItemWand extends ItemTool {
 	 * @return success or failure to find or consume item
 	 */
 	boolean consumeItem(Player player, ItemStack itemStack){
-		BTWands.LOGGER.info("looking for:" + itemStack.getItemKey());
+//		BTWands.LOGGER.info("looking for: {}", itemStack.getItemKey());
 		int selectedSlot = getInventorySlot(player, itemStack);
 		if (selectedSlot < 0) {
 			return false;

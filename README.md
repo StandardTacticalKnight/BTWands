@@ -6,8 +6,9 @@ Does what it says on the tin, craft the new wands at the workbench
 
 Change placement mode by **sneak right click**
 
-## HalpLibe
-halplibe version 3.4.17+ **required** to prevent crash on startup!
+## Dependancies
+- BTA 7.3_04
+- Halplibe 5.2.4
 
 ### Wand Tiers:
 

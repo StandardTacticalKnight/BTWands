@@ -36,10 +36,4 @@ public class BlockPos3D {
 		}
 		return this;
 	}
-	public BlockPos3D move(int dx, int dy, int dz) {
-		x += dx;
-		y += dy;
-		x += dz;
-		return this;
-	}
 }
