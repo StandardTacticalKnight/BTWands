@@ -25,8 +25,10 @@ public class BTWandsModels implements ModelEntrypoint {
 		BTWands.LOGGER.info("Initializing items models...");
 
 		textures.forEach((item, texture) -> ModelHelper.setItemModel(item, () -> {
-			ItemModelStandard model = new ItemModelStandard(item, MOD_ID);
+			ItemModelStandard model = new ItemModelStandard(item, MOD_ID).setFull3D();
 			model.icon = TextureRegistry.getTexture(NamespaceID.getTemp(MOD_ID,"item/"+texture));
+			//model.setPointInfrontOfPlayer();
+			//model.setRotateWhenRendering();
 			return model;
 		}));
 	}
