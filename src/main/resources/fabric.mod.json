@@ -29,6 +29,12 @@
 		],
 		"recipesReady": [
 			"standardtacticalknight.btwands.BTWands"
+		],
+		"afterItemInit": [
+			"standardtacticalknight.btwands.BTWandsItems"
+		],
+		"initModels": [
+			"standardtacticalknight.btwands.BTWandsModels"
 		]
 	},
   "mixins": [

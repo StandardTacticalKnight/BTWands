@@ -1,6 +1,5 @@
 package standardtacticalknight.btwands;
 
-
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.Blocks;
 import net.minecraft.core.block.entity.TileEntity;
@@ -12,15 +11,15 @@ import net.minecraft.core.util.phys.HitResult;
 import net.minecraft.core.world.World;
 import standardtacticalknight.btwands.item.ItemWand;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WandBlockFinder {
-
 	private final World world;
 	private final Player player;
 	private final boolean trowelFlag;
 	private Side side = Side.NONE; //what side of the block the player is looking at, decides the plane where blocks are searched
-	public Block origin; //blocktype being looked at
+	public Block<?> origin; //blocktype being looked at
 	public int originMeta; //metadata of the block being looked at
 	public TileEntity originTileEntity;
 
@@ -41,13 +40,13 @@ public class WandBlockFinder {
 	 * @param range square radius of block searching
 	 * @return LinkedList containing blocks to be placed/replaced
 	 */
-	public LinkedList<BlockPos3D> getBlockPositionList(HitResult hitresult, int range, ItemWand.Mode mode){
+	public List<BlockPos3D> getBlockPositionList(HitResult hitresult, int range, ItemWand.Mode mode){
 		//add the block looked at (moved 1 in face direction) to the place list
 		this.side = hitresult.side;
 		this.origin = world.getBlock(hitresult.x, hitresult.y, hitresult.z);
 		this.originMeta = world.getBlockMetadata(hitresult.x, hitresult.y, hitresult.z);
 		this.originTileEntity = this.world.getTileEntity(hitresult.x, hitresult.y, hitresult.z);
-		LinkedList<BlockPos3D> blocksToPlace = new LinkedList<>();
+		List<BlockPos3D> blocksToPlace = new ArrayList<>();
 		//direction masks for wand placement
 		int xMask, yMask, zMask;
 		switch(this.side) { //eww... this is gross... this is way too many switch statements... find a better way... some kinda truth table lookup maybe?
@@ -146,17 +145,18 @@ public class WandBlockFinder {
 	 * @return if block is valid or no
 	 */
 	private Boolean CheckValid(BlockPos3D candidate){
-		if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
-			Block<?> base = Blocks.blocksList[world.getBlockId(candidate.x, candidate.y, candidate.z)];
-			if (base != null && !base.hasTag(BlockTags.PLACE_OVERWRITES) && (base.id() == this.origin.id() || trowelFlag)) { //is foundation there and also same block as origin
-				BlockPos3D placePos = candidate.move(side);
-				if (candidate.y >= 0 && candidate.y < world.getHeightBlocks()) {
-					if (world.canBlockBePlacedAt(base.id(),placePos.x,placePos.y,placePos.z,false,side)) { //is place area air or replaceable block and is free of entities
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+		if (candidate.y < 0 || candidate.y >= world.getHeightBlocks()) return false;
+
+		Block<?> base = Blocks.blocksList[world.getBlockId(candidate.x, candidate.y, candidate.z)];
+		if (base == null) return false;
+		if (base.hasTag(BlockTags.PLACE_OVERWRITES) || (base.id() != this.origin.id() && !trowelFlag)) return false;
+
+		// Is foundation there and also same block as origin
+
+		BlockPos3D placePos = candidate.move(side);
+		if (candidate.y < 0 || candidate.y >= world.getHeightBlocks()) return false;
+
+		//is place area air or replaceable block and is free of entities
+		return world.canBlockBePlacedAt(base.id(), placePos.x, placePos.y, placePos.z, false, side);
     }
 }
